@@ -1,2 +1,3 @@
 # birthdaydroid
-Birthday App for Android
+
+Birthday App for Android.
