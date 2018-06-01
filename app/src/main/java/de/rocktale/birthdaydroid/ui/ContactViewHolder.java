@@ -31,6 +31,8 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
     {
         contactName.setText(c.fullName);
         contactBirthday.setText(mDateFormat.format(c.birthday));
-        contactAge.setText("42");   // TODO: calculate next age
+
+        // display age after next birthday
+        contactAge.setText(Integer.toString(c.getAge() + 1));
     }
 }
