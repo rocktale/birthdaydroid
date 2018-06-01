@@ -14,19 +14,30 @@ public class ContactWithBirthdayTest {
         Calendar refCal = new GregorianCalendar(1990, Calendar.MARCH, 26);
 
         Calendar beforeCal = new GregorianCalendar(2018, Calendar.JANUARY, 4);
-        assertEquals(ContactWithBirthday.getYearDifference(refCal, beforeCal), 27);
+        assertEquals(27, ContactWithBirthday.getYearDifference(refCal, beforeCal));
 
         Calendar beforeWithinMonthCal = new GregorianCalendar(2018, Calendar.MARCH, 25);
-        assertEquals(ContactWithBirthday.getYearDifference(refCal, beforeWithinMonthCal), 27);
+        assertEquals(27, ContactWithBirthday.getYearDifference(refCal, beforeWithinMonthCal));
 
         Calendar sameDayCal = new GregorianCalendar(2018, Calendar.MARCH, 26);
-        assertEquals(ContactWithBirthday.getYearDifference(refCal, sameDayCal), 28);
+        assertEquals(28, ContactWithBirthday.getYearDifference(refCal, sameDayCal));
 
         Calendar afterWithinMonthCal = new GregorianCalendar(2018, Calendar.MARCH, 30);
-        assertEquals(ContactWithBirthday.getYearDifference(refCal, afterWithinMonthCal), 28);
+        assertEquals(28, ContactWithBirthday.getYearDifference(refCal, afterWithinMonthCal));
 
         Calendar afterCal = new GregorianCalendar(2018, Calendar.MAY, 4);
-        assertEquals(ContactWithBirthday.getYearDifference(refCal, afterCal), 28);
+        assertEquals(28, ContactWithBirthday.getYearDifference(refCal, afterCal));
 
+    }
+
+    @Test
+    public void daysToNextBirthday() {
+        Calendar refCal = new GregorianCalendar(1990, Calendar.MARCH, 26);
+        ContactWithBirthday refContact = new ContactWithBirthday();
+        refContact.birthday = refCal.getTime();
+
+        Calendar today = new GregorianCalendar(2018, Calendar.MARCH, 12);
+
+        assertEquals(14, refContact.daysToNextBirthday(today));
     }
 }

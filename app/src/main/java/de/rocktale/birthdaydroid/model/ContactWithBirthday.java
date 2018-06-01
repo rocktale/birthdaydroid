@@ -23,9 +23,22 @@ public class ContactWithBirthday {
     }
 
     public int getAge() {
-        Calendar birth = Calendar.getInstance();
-        birth.setTime(birthday);
-        return getYearDifference(birth, Calendar.getInstance());
+        return getYearDifference(getCalendar(birthday), Calendar.getInstance());
     }
 
+    public long timeToNextBirthday(Calendar today) {
+        Calendar nextBirthday = getCalendar(birthday);
+        nextBirthday.set(Calendar.YEAR, today.get(Calendar.YEAR));
+        if (!nextBirthday.after(today)) {
+            nextBirthday.add(Calendar.YEAR, 1);
+        }
+
+        return nextBirthday.getTimeInMillis() - today.getTimeInMillis();
+    }
+
+    private static Calendar getCalendar(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
+    }
 }
