@@ -29,15 +29,5 @@ public class ContactWithBirthdayTest {
         assertEquals(28, ContactWithBirthday.getYearDifference(refCal, afterCal));
 
     }
-
-    @Test
-    public void daysToNextBirthday() {
-        Calendar refCal = new GregorianCalendar(1990, Calendar.MARCH, 26);
-        ContactWithBirthday refContact = new ContactWithBirthday();
-        refContact.birthday = refCal.getTime();
-
-        Calendar today = new GregorianCalendar(2018, Calendar.MARCH, 12);
-
-        assertEquals(14, refContact.daysToNextBirthday(today));
-    }
+    
 }

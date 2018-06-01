@@ -13,16 +13,7 @@ public class SortByNextBirthday implements Comparator<ContactWithBirthday> {
     }
 
     public int compare(ContactWithBirthday a, ContactWithBirthday b) {
-        long timeToA = a.timeToNextBirthday(today);
-        long timeToB = b.timeToNextBirthday(today);
-        if (timeToA < timeToB) {
-            return -1;
-        }
-        else if (timeToA == timeToB) {
-            return 0;
-        } else {
-            return 1;
-        }
+        return Long.compare(a.timeToNextBirthday(today), b.timeToNextBirthday(today));
     }
 
 }

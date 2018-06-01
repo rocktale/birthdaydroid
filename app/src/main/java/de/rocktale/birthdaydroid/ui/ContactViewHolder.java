@@ -16,15 +16,13 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
     private TextView contactBirthday;
     private TextView contactAge;
 
-    private DateFormat mDateFormat;
+    private static final DateFormat mDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     public ContactViewHolder(final View itemView) {
         super(itemView);
         contactName = itemView.findViewById(R.id.contactName);
         contactBirthday = itemView.findViewById(R.id.contactBirthday);
         contactAge = itemView.findViewById(R.id.contactAge);
-
-        mDateFormat = new SimpleDateFormat("dd.MM.yyyy");
     }
 
     public void bind(ContactWithBirthday c)

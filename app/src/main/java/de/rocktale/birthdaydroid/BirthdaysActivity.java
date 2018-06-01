@@ -35,7 +35,7 @@ public class BirthdaysActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_birthdays);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.birthdayList);
+        mRecyclerView = findViewById(R.id.birthdayList);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -49,7 +49,7 @@ public class BirthdaysActivity extends AppCompatActivity {
     }
 
 
-    // Request code for READ_CONTACTS. It can be any number > 0.
+    // Request code for READ_CONTACTS
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
     private void requestContacts() {
