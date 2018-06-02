@@ -9,6 +9,7 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,6 +48,11 @@ public class BirthdaysActivity extends AppCompatActivity {
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        RecyclerView.ItemDecoration deviderItemDecoration =
+                new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        mRecyclerView.addItemDecoration(deviderItemDecoration);
+
 
         requestContacts();
     }
