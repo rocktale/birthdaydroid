@@ -14,9 +14,10 @@ import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import de.rocktale.birthdaydroid.model.ContactWithBirthday;
 import de.rocktale.birthdaydroid.model.SortByNextBirthday;
@@ -97,29 +98,28 @@ public class BirthdaysActivity extends AppCompatActivity {
         int bDayColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
         int nameColumn = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
 
-        ContactWithBirthday[] birthdays = new ContactWithBirthday[cursor.getCount()];
+        List<ContactWithBirthday> birthdays = new ArrayList<>(cursor.getCount());
         DateFormat df = new SimpleDateFormat("yy-MM-dd");
 
-        int i = 0;
-
         while (cursor.moveToNext()) {
-            birthdays[i] = new ContactWithBirthday();
-            birthdays[i].fullName = cursor.getString(nameColumn);
+            ContactWithBirthday c = new ContactWithBirthday();
+            c.fullName = cursor.getString(nameColumn);
 
             String birthDayString = cursor.getString(bDayColumn);
             try {
-                birthdays[i].birthday = df.parse(birthDayString);
+                c.birthday = df.parse(birthDayString);
             }
             catch (java.text.ParseException e)
             {
-                Log.e(TAG, "Failed to parse birthday: " + birthDayString);
-                birthdays[i].birthday = new Date();
+                Log.e(TAG, "Failed to parse birthday for contact '" + c.fullName + "': " + birthDayString);
+                continue;
             }
-            i++;
+
+            birthdays.add(c);
         }
 
         // sort the array in the order of next birthdays
-        Arrays.sort(birthdays, new SortByNextBirthday(new GregorianCalendar()));
+        Collections.sort(birthdays, new SortByNextBirthday(new GregorianCalendar()));
 
         // set the adapter on the recycler view
         mAdapter = new BirthdaysAdapter(birthdays);

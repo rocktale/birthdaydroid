@@ -29,5 +29,5 @@ public class ContactWithBirthdayTest {
         assertEquals(28, ContactWithBirthday.getYearDifference(refCal, afterCal));
 
     }
-    
+
 }
