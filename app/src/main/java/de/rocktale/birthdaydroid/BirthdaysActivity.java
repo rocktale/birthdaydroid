@@ -1,6 +1,7 @@
 package de.rocktale.birthdaydroid;
 
 import android.Manifest;
+import android.content.ContentUris;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -78,9 +79,10 @@ public class BirthdaysActivity extends AppCompatActivity {
         Uri uri = ContactsContract.Data.CONTENT_URI;
 
         String[] projection = new String[] {
+                ContactsContract.Contacts._ID,
                 ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Event.CONTACT_ID,
-                ContactsContract.CommonDataKinds.Event.START_DATE
+                ContactsContract.CommonDataKinds.Event.START_DATE,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID
         };
 
         String where =
@@ -97,6 +99,7 @@ public class BirthdaysActivity extends AppCompatActivity {
         Cursor cursor = getContactsBirthdays();
         int bDayColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
         int nameColumn = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+        int idColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
 
         List<ContactWithBirthday> birthdays = new ArrayList<>(cursor.getCount());
         DateFormat df = new SimpleDateFormat("yy-MM-dd");
@@ -115,6 +118,9 @@ public class BirthdaysActivity extends AppCompatActivity {
                 continue;
             }
 
+            long contactId = cursor.getLong(idColumn);
+            Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
+            c.profilePicture = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
             birthdays.add(c);
         }
 
