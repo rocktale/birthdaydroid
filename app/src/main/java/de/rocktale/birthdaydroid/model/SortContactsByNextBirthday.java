@@ -5,11 +5,11 @@ import org.threeten.bp.LocalDate;
 
 import java.util.Comparator;
 
-public class SortByNextBirthday implements Comparator<Contact> {
+public class SortContactsByNextBirthday implements Comparator<Contact> {
 
     private LocalDate today;
 
-    public SortByNextBirthday(LocalDate today) {
+    public SortContactsByNextBirthday(LocalDate today) {
         this.today = today;
     }
 

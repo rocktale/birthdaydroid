@@ -9,19 +9,19 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import de.rocktale.birthdaydroid.R;
-import de.rocktale.birthdaydroid.model.ContactWithBirthday;
+import de.rocktale.birthdaydroid.model.Contact;
 
 public class BirthdaysAdapter extends RecyclerView.Adapter<ContactViewHolder> {
 
-    private List<ContactWithBirthday> mBirthdays;
+    private List<Contact> contacts;
 
-    public BirthdaysAdapter(List<ContactWithBirthday> birthdays) {
-        this.mBirthdays = birthdays;
+    public BirthdaysAdapter(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ContactViewHolder holder, int position) {
-        holder.bind(mBirthdays.get(position));
+        holder.bind(contacts.get(position));
     }
 
     @NonNull
@@ -36,6 +36,6 @@ public class BirthdaysAdapter extends RecyclerView.Adapter<ContactViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mBirthdays.size();
+        return contacts.size();
     }
 }

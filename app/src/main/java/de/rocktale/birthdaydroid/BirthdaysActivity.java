@@ -13,15 +13,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeParseException;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import de.rocktale.birthdaydroid.model.ContactWithBirthday;
-import de.rocktale.birthdaydroid.model.SortByNextBirthday;
+import de.rocktale.birthdaydroid.model.Birthday;
+import de.rocktale.birthdaydroid.model.Contact;
+import de.rocktale.birthdaydroid.model.SortContactsByNextBirthday;
 import de.rocktale.birthdaydroid.ui.BirthdaysAdapter;
 
 public class BirthdaysActivity extends AppCompatActivity {
@@ -101,34 +102,33 @@ public class BirthdaysActivity extends AppCompatActivity {
         int nameColumn = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
         int idColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
 
-        List<ContactWithBirthday> birthdays = new ArrayList<>(cursor.getCount());
-        DateFormat df = new SimpleDateFormat("yy-MM-dd");
+        List<Contact> contacts = new ArrayList<>(cursor.getCount());
 
         while (cursor.moveToNext()) {
-            ContactWithBirthday c = new ContactWithBirthday();
-            c.fullName = cursor.getString(nameColumn);
 
-            String birthDayString = cursor.getString(bDayColumn);
-            try {
-                c.birthday = df.parse(birthDayString);
-            }
-            catch (java.text.ParseException e)
+            Contact c = new Contact(cursor.getString(nameColumn));
+
+            try
             {
-                Log.e(TAG, "Failed to parse birthday for contact '" + c.fullName + "': " + birthDayString);
+                c.birthday = new Birthday(cursor.getString(bDayColumn));
+            }
+            catch (DateTimeParseException e)
+            {
+                Log.e(TAG, "Failed to parse birthday for contact '" + c.fullName + "': " + cursor.getString(bDayColumn));
                 continue;
             }
 
             long contactId = cursor.getLong(idColumn);
             Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
-            c.profilePicture = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-            birthdays.add(c);
+            c.profilePicture = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
+            contacts.add(c);
         }
 
         // sort the array in the order of next birthdays
-        Collections.sort(birthdays, new SortByNextBirthday(new GregorianCalendar()));
+        Collections.sort(contacts, new SortContactsByNextBirthday(LocalDate.now()));
 
         // set the adapter on the recycler view
-        mAdapter = new BirthdaysAdapter(birthdays);
+        mAdapter = new BirthdaysAdapter(contacts);
         mRecyclerView.setAdapter(mAdapter);
     }
 }
