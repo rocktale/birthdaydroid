@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -29,11 +30,12 @@ import de.rocktale.birthdaydroid.model.Contact;
 import de.rocktale.birthdaydroid.model.SortContactsByNextBirthday;
 import de.rocktale.birthdaydroid.ui.BirthdaysAdapter;
 
-public class BirthdaysActivity extends AppCompatActivity {
+public class BirthdaysActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView mRecyclerView;
     private BirthdaysAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private SwipeRefreshLayout refreshLayout;
 
     private static final String TAG = "BirthdaysActivity";
 
@@ -63,7 +65,20 @@ public class BirthdaysActivity extends AppCompatActivity {
         mAdapter = new BirthdaysAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
-        requestContacts();
+        refreshLayout = findViewById(R.id.swiperefresh);
+        refreshLayout.setOnRefreshListener(this);
+
+        refreshLayout.post(new Runnable() {
+
+            @Override
+            public void run() {
+
+                refreshLayout.setRefreshing(true);
+
+                // Fetching data from server
+                requestContacts();
+            }
+        });
     }
 
 
@@ -145,6 +160,8 @@ public class BirthdaysActivity extends AppCompatActivity {
         // update the data
         mAdapter.setContacts(contacts);
         mAdapter.notifyDataSetChanged();
+
+        refreshLayout.setRefreshing(false);
     }
 
     // ActionMenu related stuff
@@ -160,6 +177,7 @@ public class BirthdaysActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
+                refreshLayout.setRefreshing(true);
                 requestContacts();
                 return true;
 
@@ -168,5 +186,10 @@ public class BirthdaysActivity extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        requestContacts();
     }
 }
