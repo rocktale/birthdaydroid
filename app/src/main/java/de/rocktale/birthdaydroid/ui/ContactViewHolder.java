@@ -56,7 +56,8 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
                     .placeholder(fallbackImage)
                     .error(fallbackImage)
                     .transform(new CircleImageTransformation())
-                    .resize(48, 48)
+                    .fit()
+                    .centerInside()
                     .into(contactThumb);
 
         }
