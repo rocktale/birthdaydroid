@@ -15,13 +15,11 @@ public class BirthdaysAdapter extends RecyclerView.Adapter<ContactViewHolder> {
 
     private List<Contact> contacts;
 
-    public BirthdaysAdapter(List<Contact> contacts) {
-        this.contacts = contacts;
-    }
-
     @Override
     public void onBindViewHolder(@NonNull ContactViewHolder holder, int position) {
-        holder.bind(contacts.get(position));
+        if (contacts != null) {
+            holder.bind(contacts.get(position));
+        }
     }
 
     @NonNull
@@ -36,6 +34,15 @@ public class BirthdaysAdapter extends RecyclerView.Adapter<ContactViewHolder> {
 
     @Override
     public int getItemCount() {
-        return contacts.size();
+        if (contacts != null) {
+            return contacts.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public void setContacts(List<Contact> contacts)
+    {
+        this.contacts = contacts;
     }
 }

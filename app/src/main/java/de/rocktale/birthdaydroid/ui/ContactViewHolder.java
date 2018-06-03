@@ -1,6 +1,5 @@
 package de.rocktale.birthdaydroid.ui;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,8 +40,6 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
 
         // display age after next birthday
         contactAge.setText(Long.toString(c.birthday.currentAge(LocalDate.now()) + 1));
-
-        Picasso.get().setLoggingEnabled(true);
 
         String initials = "?";
         if (!c.fullName.isEmpty())

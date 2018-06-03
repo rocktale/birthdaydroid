@@ -12,7 +12,10 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeParseException;
@@ -29,7 +32,7 @@ import de.rocktale.birthdaydroid.ui.BirthdaysAdapter;
 public class BirthdaysActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private BirthdaysAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     private static final String TAG = "BirthdaysActivity";
@@ -38,6 +41,9 @@ public class BirthdaysActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_birthdays);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mRecyclerView = findViewById(R.id.birthdayList);
 
@@ -53,6 +59,9 @@ public class BirthdaysActivity extends AppCompatActivity {
                 new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(deviderItemDecoration);
 
+        // set the adapter on the recycler view
+        mAdapter = new BirthdaysAdapter();
+        mRecyclerView.setAdapter(mAdapter);
 
         requestContacts();
     }
@@ -133,8 +142,31 @@ public class BirthdaysActivity extends AppCompatActivity {
         // sort the array in the order of next birthdays
         Collections.sort(contacts, new SortContactsByNextBirthday(LocalDate.now()));
 
-        // set the adapter on the recycler view
-        mAdapter = new BirthdaysAdapter(contacts);
-        mRecyclerView.setAdapter(mAdapter);
+        // update the data
+        mAdapter.setContacts(contacts);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    // ActionMenu related stuff
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh:
+                requestContacts();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
