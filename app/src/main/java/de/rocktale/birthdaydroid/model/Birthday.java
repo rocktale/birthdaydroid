@@ -24,18 +24,36 @@ public class Birthday {
         return this.date;
     }
 
-    public long daysTillNextBirthday(LocalDate today) {
+    public LocalDate nextBirthday(LocalDate today) {
         LocalDate nextBirthday = date.withYear(today.getYear());
         if (today.isAfter(nextBirthday))
         {
-            nextBirthday = nextBirthday.plusYears(1);
+            return nextBirthday.plusYears(1);
         }
+        else
+        {
+            return nextBirthday;
+        }
+    }
 
-        return ChronoUnit.DAYS.between(today, nextBirthday);
+    public long daysTillNextBirthday(LocalDate today) {
+        return ChronoUnit.DAYS.between(today, nextBirthday(today));
+    }
+
+    public boolean isToday(LocalDate today) {
+        return today == nextBirthday(today);
     }
 
     public long currentAge(LocalDate today) {
         return ChronoUnit.YEARS.between(date, today);
     }
 
+    public long ageOnNextBirthday(LocalDate today) {
+        if (isToday(today)) {
+            return currentAge(today);
+        }
+        else {
+            return currentAge(today) + 1;
+        }
+    }
 }

@@ -38,8 +38,8 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         contactName.setText(c.fullName);
         contactBirthday.setText(dateFormat.format(c.birthday.getDate()));
 
-        // display age after next birthday
-        contactAge.setText(Long.toString(c.birthday.currentAge(LocalDate.now()) + 1));
+        // display age on next birthday
+        contactAge.setText(Long.toString(c.birthday.ageOnNextBirthday(LocalDate.now())));
 
         String initials = "?";
         if (!c.fullName.isEmpty())
