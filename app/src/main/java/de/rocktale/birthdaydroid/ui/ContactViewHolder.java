@@ -1,5 +1,8 @@
 package de.rocktale.birthdaydroid.ui;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +26,9 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView contactThumb;
 
+    private View tableRow;
+    private Context context;
+
     private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private static final ColorGenerator colors = ColorGenerator.MATERIAL;
 
@@ -32,14 +38,18 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         contactBirthday = itemView.findViewById(R.id.contactBirthday);
         contactAge = itemView.findViewById(R.id.contactAge);
         contactThumb = itemView.findViewById(R.id.contactThumb);
+        tableRow = itemView.findViewById(R.id.listEntry);
+        context = itemView.getContext();
     }
 
     public void bind(Contact c) {
         contactName.setText(c.fullName);
         contactBirthday.setText(dateFormat.format(c.birthday.getDate()));
 
+        LocalDate today = LocalDate.now();
+
         // display age on next birthday
-        contactAge.setText(Long.toString(c.birthday.ageOnNextBirthday(LocalDate.now())));
+        contactAge.setText(Long.toString(c.birthday.ageOnNextBirthday(today)));
 
         String initials = "?";
         if (!c.fullName.isEmpty())
@@ -60,6 +70,15 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
                     .centerInside()
                     .into(contactThumb);
 
+        }
+
+        if (c.birthday.isAtDate(today))
+        {
+            tableRow.setBackgroundColor(ContextCompat.getColor(context, R.color.list_background_highlight));
+        }
+        else
+        {
+            tableRow.setBackgroundColor(Color.TRANSPARENT);
         }
     }
 }

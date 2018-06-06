@@ -3,6 +3,7 @@ package de.rocktale.birthdaydroid.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -62,16 +63,9 @@ public class BirthdayListWidgetViewsFactory implements RemoteViewsService.Remote
     public RemoteViews getViewAt(int position) {
         Log.d(TAG, "getViewAt: position=" + position);
         Contact c = contacts.get(position);
-        RemoteViews rv;
+        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.birthday_list_widget_item);
 
         LocalDate today = LocalDate.now();
-
-        if (c.birthday.isAtDate(today)) {
-            rv = new RemoteViews(context.getPackageName(), R.layout.birthday_list_widget_item_highlighted);
-        }
-        else {
-            rv = new RemoteViews(context.getPackageName(), R.layout.birthday_list_widget_item);
-        }
 
         rv.setTextViewText(R.id.widget_item_name, c.fullName);
         rv.setTextViewText(R.id.widget_item_date, dateFormat.format(c.birthday.getDate()));
@@ -79,6 +73,14 @@ public class BirthdayListWidgetViewsFactory implements RemoteViewsService.Remote
                 R.id.widget_item_age,
                 Long.toString(c.birthday.ageOnNextBirthday(today)));
 
+
+        if (c.birthday.isAtDate(today)) {
+            // highlight birthdays that are today
+            rv.setTextColor(R.id.widget_item_date, context.getResources().getColor(R.color.colorPrimary));
+        }
+        else {
+            rv.setTextColor(R.id.widget_item_date, Color.WHITE);
+        }
 
         // set the fill event on each text view individually
         // since it seems we cannot apply it to the entire layout
@@ -96,7 +98,7 @@ public class BirthdayListWidgetViewsFactory implements RemoteViewsService.Remote
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 1;
     }
 
     @Override
