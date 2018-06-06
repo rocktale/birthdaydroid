@@ -20,22 +20,33 @@ public class BirthdayTest {
     }
 
     @Test
-    public void currentAge() {
+    public void ageAtDate() {
         Birthday b = new Birthday("1990-03-26");
 
         LocalDate before = LocalDate.of(2018, JANUARY, 4);
-        assertEquals(27, b.currentAge(before));
+        assertEquals(27, b.ageAtDate(before));
 
         LocalDate beforeWithinMonth = LocalDate.of(2018, MARCH, 25);
-        assertEquals(27, b.currentAge(beforeWithinMonth));
+        assertEquals(27, b.ageAtDate(beforeWithinMonth));
 
         LocalDate sameDay = LocalDate.of(2018, MARCH, 26);
-        assertEquals(28, b.currentAge(sameDay));
+        assertEquals(28, b.ageAtDate(sameDay));
 
         LocalDate afterWithinMonth = LocalDate.of(2018, MARCH, 30);
-        assertEquals(28, b.currentAge(afterWithinMonth));
+        assertEquals(28, b.ageAtDate(afterWithinMonth));
 
         LocalDate after = LocalDate.of(2018, MAY, 4);
-        assertEquals(28, b.currentAge(after));
+        assertEquals(28, b.ageAtDate(after));
+    }
+
+    @Test
+    public void isAtDate() {
+        Birthday b = new Birthday("1990-03-26");
+
+        LocalDate itIsToday = LocalDate.of(2018, MARCH, 26);
+        assertEquals(true, b.isAtDate(itIsToday));
+
+        LocalDate itIsNotToday = LocalDate.of(2018, MARCH, 27);
+        assertEquals(false, b.isAtDate(itIsNotToday));
     }
 }

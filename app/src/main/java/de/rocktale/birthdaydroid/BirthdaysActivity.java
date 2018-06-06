@@ -1,7 +1,10 @@
 package de.rocktale.birthdaydroid;
 
 import android.Manifest;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentUris;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -29,6 +32,7 @@ import de.rocktale.birthdaydroid.model.Birthday;
 import de.rocktale.birthdaydroid.model.Contact;
 import de.rocktale.birthdaydroid.model.SortContactsByNextBirthday;
 import de.rocktale.birthdaydroid.ui.BirthdaysAdapter;
+import de.rocktale.birthdaydroid.widget.BirthdayListWidget;
 
 public class BirthdaysActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -164,6 +168,16 @@ public class BirthdaysActivity extends AppCompatActivity implements SwipeRefresh
         refreshLayout.setRefreshing(false);
     }
 
+    public void updateWidgets() {
+        Intent intent = new Intent(this, BirthdayListWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
+        int[] ids = AppWidgetManager.getInstance(getApplication())
+                .getAppWidgetI‌​ds(new ComponentName(getApplication(), BirthdayListWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
+    }
+
     // ActionMenu related stuff
 
     @Override
@@ -191,5 +205,6 @@ public class BirthdaysActivity extends AppCompatActivity implements SwipeRefresh
     @Override
     public void onRefresh() {
         requestContacts();
+        updateWidgets();
     }
 }

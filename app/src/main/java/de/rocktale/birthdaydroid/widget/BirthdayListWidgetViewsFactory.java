@@ -1,10 +1,8 @@
 package de.rocktale.birthdaydroid.widget;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -15,6 +13,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeParseException;
 
+import de.rocktale.birthdaydroid.BirthdaysActivity;
 import de.rocktale.birthdaydroid.R;
 import de.rocktale.birthdaydroid.model.Birthday;
 import de.rocktale.birthdaydroid.model.Contact;
@@ -24,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.Math.min;
+
 public class BirthdayListWidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context context = null;
@@ -32,15 +33,14 @@ public class BirthdayListWidgetViewsFactory implements RemoteViewsService.Remote
     private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.");
     private static final int maxEntries = 20;
 
+    private static final String TAG = "BirthdayWidgetViews";
+
     BirthdayListWidgetViewsFactory(Context context, Intent intent) {
         this.context = context;
     }
 
     @Override
     public void onCreate() {
-        contacts.add(new Contact("John Snow", "1987-03-24"));
-        contacts.add(new Contact("John Oliver", "1977-10-23"));
-        contacts.add(new Contact("James Bond", "1972-08-01"));
     }
 
     @Override
@@ -60,24 +60,32 @@ public class BirthdayListWidgetViewsFactory implements RemoteViewsService.Remote
 
     @Override
     public RemoteViews getViewAt(int position) {
+        Log.d(TAG, "getViewAt: position=" + position);
         Contact c = contacts.get(position);
-        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.birthday_list_widget_item);
-
-        rv.setTextViewText(R.id.widget_item_name, c.fullName);
-        rv.setTextViewText(R.id.widget_item_date, dateFormat.format(c.birthday.getDate()));
+        RemoteViews rv;
 
         LocalDate today = LocalDate.now();
 
+        if (c.birthday.isAtDate(today)) {
+            rv = new RemoteViews(context.getPackageName(), R.layout.birthday_list_widget_item_highlighted);
+        }
+        else {
+            rv = new RemoteViews(context.getPackageName(), R.layout.birthday_list_widget_item);
+        }
+
+        rv.setTextViewText(R.id.widget_item_name, c.fullName);
+        rv.setTextViewText(R.id.widget_item_date, dateFormat.format(c.birthday.getDate()));
         rv.setTextViewText(
                 R.id.widget_item_age,
                 Long.toString(c.birthday.ageOnNextBirthday(today)));
 
-        if (c.birthday.isToday(today))
-        {
-            // highlight date if birthday is today
-            rv.setTextColor(R.id.widget_item_date, Color.GREEN);
-        }
 
+        // set the fill event on each text view individually
+        // since it seems we cannot apply it to the entire layout
+        Intent launchIntent = new Intent(context, BirthdaysActivity.class);
+        rv.setOnClickFillInIntent(R.id.widget_item_name, launchIntent);
+        rv.setOnClickFillInIntent(R.id.widget_item_date, launchIntent);
+        rv.setOnClickFillInIntent(R.id.widget_item_age, launchIntent);
         return rv;
     }
 
@@ -88,7 +96,7 @@ public class BirthdayListWidgetViewsFactory implements RemoteViewsService.Remote
 
     @Override
     public int getViewTypeCount() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -125,7 +133,8 @@ public class BirthdayListWidgetViewsFactory implements RemoteViewsService.Remote
         int bDayColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE);
         int nameColumn = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
 
-        contacts.clear();
+        // fetch a new list of contacts
+        List<Contact> contacts = new ArrayList<>();
         while (cursor.moveToNext()) {
 
             Contact c = new Contact(cursor.getString(nameColumn));
@@ -144,5 +153,9 @@ public class BirthdayListWidgetViewsFactory implements RemoteViewsService.Remote
 
         // sort the array in the order of next birthdays
         Collections.sort(contacts, new SortContactsByNextBirthday(LocalDate.now()));
+
+        // keep only the first n entries
+        // since subList returns only a view, we copy the relevant entries here
+        this.contacts = new ArrayList<>(contacts.subList(0, min(contacts.size(), maxEntries)));
     }
 }

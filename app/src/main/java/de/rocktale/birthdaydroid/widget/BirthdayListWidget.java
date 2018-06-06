@@ -1,11 +1,13 @@
 package de.rocktale.birthdaydroid.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import de.rocktale.birthdaydroid.BirthdaysActivity;
 import de.rocktale.birthdaydroid.R;
 
 /**
@@ -27,6 +29,14 @@ public class BirthdayListWidget extends AppWidgetProvider {
 
         // TODO: check empty view usage
         // views.setEmptyView(R.id.birthday_list_widget, ...);
+
+
+        // Launch the app when clicking on the widget
+        Intent launchIntent = new Intent(context, BirthdaysActivity.class);
+        PendingIntent launchPendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
+
+        views.setPendingIntentTemplate(R.id.birthday_list_widget, launchPendingIntent);
+
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

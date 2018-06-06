@@ -40,20 +40,20 @@ public class Birthday {
         return ChronoUnit.DAYS.between(today, nextBirthday(today));
     }
 
-    public boolean isToday(LocalDate today) {
-        return today == nextBirthday(today);
+    public boolean isAtDate(LocalDate date) {
+        return date.equals(this.date.withYear(date.getYear()));
     }
 
-    public long currentAge(LocalDate today) {
-        return ChronoUnit.YEARS.between(date, today);
+    public long ageAtDate(LocalDate date) {
+        return ChronoUnit.YEARS.between(this.date, date);
     }
 
     public long ageOnNextBirthday(LocalDate today) {
-        if (isToday(today)) {
-            return currentAge(today);
+        if (isAtDate(today)) {
+            return ageAtDate(today);
         }
         else {
-            return currentAge(today) + 1;
+            return ageAtDate(today) + 1;
         }
     }
 }

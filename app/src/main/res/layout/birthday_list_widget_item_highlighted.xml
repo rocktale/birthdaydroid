@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/birthday_list_widget_item"
+    android:id="@+id/birthday_list_widget_item_highlighted"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:alpha="1.0">
@@ -12,7 +12,7 @@
         android:layout_weight="1.0"
         android:text="23.04."
         android:textAlignment="viewStart"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/widget_item_name"
