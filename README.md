@@ -19,7 +19,6 @@ at the next birthdays on the home screen.
 
 * Update widget at midnight
 * Display remaining days till birthday
-* Highlight birthdays that are today
 * Add localization in English and German
 * Improve robustness of contact list parsing
 * Add notifications on or before birthdays (optional)
