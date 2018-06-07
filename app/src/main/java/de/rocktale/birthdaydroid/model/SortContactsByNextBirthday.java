@@ -1,7 +1,7 @@
 package de.rocktale.birthdaydroid.model;
 
 
-import org.threeten.bp.LocalDate;
+import java.time.LocalDate;
 
 import java.util.Comparator;
 

@@ -1,10 +1,10 @@
 package de.rocktale.birthdaydroid.model;
 
 import org.junit.Test;
-import org.threeten.bp.LocalDate;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
-import static org.threeten.bp.Month.*;
+import static java.time.Month.*;
 
 public class BirthdayTest {
 

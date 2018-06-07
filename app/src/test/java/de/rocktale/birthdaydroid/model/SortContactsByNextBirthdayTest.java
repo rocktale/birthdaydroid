@@ -1,8 +1,8 @@
 package de.rocktale.birthdaydroid.model;
 
 import org.junit.Test;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.Month;
+import java.time.LocalDate;
+import java.time.Month;
 
 import java.util.ArrayList;
 import java.util.Collections;

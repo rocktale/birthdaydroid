@@ -25,7 +25,9 @@ at the next birthdays on the home screen.
 
 ## Supported platforms
 
-So far, it is only tested on a Samsung S7 running Android 7.0 and on the
+This app requires Android SDK version 26 since it uses `java.time` for all
+the date related operations. Therefore, it can only be used on Android 8.0
+and newer. So far, it is only tested on a Samsung S7 running Android 8.0 and on the
 Android 8.1 emulator image. I have no idea if other devices work as well.
 
 ## Use at own risk
