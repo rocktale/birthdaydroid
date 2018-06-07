@@ -1,6 +1,7 @@
 package de.rocktale.birthdaydroid;
 
 import android.Manifest;
+import android.app.Application;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.ContentUris;
@@ -20,11 +21,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -169,13 +172,13 @@ public class BirthdaysActivity extends AppCompatActivity implements SwipeRefresh
     }
 
     public void updateWidgets() {
-        Intent intent = new Intent(this, BirthdayListWidget.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        Application thisApp = getApplication();
+        ComponentName widgetComponent = new ComponentName(thisApp, BirthdayListWidget.class);
+        AppWidgetManager widgetManager = AppWidgetManager.getInstance(thisApp);
+        int[] ids = widgetManager.getAppWidgetI‌​ds(widgetComponent);
+        Log.d(TAG, "Updating widgets: " + Arrays.toString(ids));
 
-        int[] ids = AppWidgetManager.getInstance(getApplication())
-                .getAppWidgetI‌​ds(new ComponentName(getApplication(), BirthdayListWidget.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        sendBroadcast(intent);
+        widgetManager.notifyAppWidgetViewDataChanged(ids, R.id.birthday_list_widget);
     }
 
     // ActionMenu related stuff
@@ -193,6 +196,7 @@ public class BirthdaysActivity extends AppCompatActivity implements SwipeRefresh
             case R.id.refresh:
                 refreshLayout.setRefreshing(true);
                 requestContacts();
+                updateWidgets();
                 return true;
 
             default:

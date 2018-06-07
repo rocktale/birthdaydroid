@@ -13,11 +13,11 @@ at the next birthdays on the home screen.
   * Date
   * Age at the next birthday
 * Simple widget based on a list view
+  * With automatic update shortly after midnight
 * No ads, spyware or secret calls to remote locations
 
 ### Roadmap
 
-* Update widget at midnight
 * Display remaining days till birthday
 * Add localization in English and German
 * Improve robustness of contact list parsing

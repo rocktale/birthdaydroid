@@ -46,6 +46,7 @@ public class BirthdayListWidgetViewsFactory implements RemoteViewsService.Remote
 
     @Override
     public void onDataSetChanged() {
+        Log.d(TAG, "Data set has changed");
         populateBirthdays();
     }
 
