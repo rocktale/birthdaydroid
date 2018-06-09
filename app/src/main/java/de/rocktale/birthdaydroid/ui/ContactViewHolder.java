@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -42,11 +43,11 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         context = itemView.getContext();
     }
 
-    public void bind(Contact c) {
+    public void bind(final Contact c) {
         contactName.setText(c.fullName);
         contactBirthday.setText(dateFormat.format(c.birthday.getDate()));
 
-        LocalDate today = LocalDate.now();
+        final LocalDate today = LocalDate.now();
 
         // display age on next birthday
         contactAge.setText(Long.toString(c.birthday.ageOnNextBirthday(today)));
@@ -56,7 +57,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         {
             initials = Character.toString(c.fullName.charAt(0));
         }
-        TextDrawable fallbackImage = TextDrawable.builder()
+        final TextDrawable fallbackImage = TextDrawable.builder()
                 .buildRound(initials, colors.getColor(initials));
 
 
@@ -80,5 +81,27 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
         {
             tableRow.setBackgroundColor(Color.TRANSPARENT);
         }
+
+        String birthdayString;
+        long remainingDays = c.birthday.daysTillNextBirthday(today);
+        if (remainingDays == 0)
+        {
+            birthdayString = "heute";
+        } else if (remainingDays == 1)
+        {
+            birthdayString = "morgen";
+        } else
+        {
+            birthdayString = "in " + Long.toString(remainingDays) + " Tagen";
+        }
+
+        final String msg = c.fullName + " hat " + birthdayString + " Geburtstag.";
+
+        tableRow.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v)
+            {
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

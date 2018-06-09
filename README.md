@@ -1,8 +1,10 @@
 # birthdaydroid
 
 This small app is intended to show a list of upcoming birthdays from the
-contact list. Furthermore, a simple widget is planned to get a quick glance
+contact list. Furthermore, a simple widget is provided to get a quick glance
 at the next birthdays on the home screen.
+
+So far, the app only speaks German.
 
 ## Freatures
 
@@ -12,15 +14,16 @@ at the next birthdays on the home screen.
   * Name
   * Date
   * Age at the next birthday
+  * Remaining days till birthday as a toast message when clicked
 * Simple widget based on a list view
   * With automatic update shortly after midnight
 * No ads, spyware or secret calls to remote locations
 
 ### Roadmap
 
-* Display remaining days till birthday
 * Add localization in English and German
 * Improve robustness of contact list parsing
+* Replace "remaining days till birthday" toast with a detail view of the the contact, including a larger image, the remaining days and some quick links to send a message
 * Add notifications on or before birthdays (optional)
 
 ## Supported platforms
